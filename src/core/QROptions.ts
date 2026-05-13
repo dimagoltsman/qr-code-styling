@@ -62,7 +62,7 @@ const defaultOptions: RequiredOptions = {
   },
   backgroundOptions: {
     round: 0,
-    color: "#fff"
+    color: "transparent"
   }
 };
 
