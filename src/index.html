@@ -919,10 +919,10 @@
         <div>
           <label class="field-label">Color</label>
           <div class="color-picker-wrap">
-            <div class="color-swatch" id="swatch-dots" style="background:#000">
-              <input type="color" id="opt-dots-color" value="#000000">
+            <div class="color-swatch" id="swatch-dots" style="background:#4b4b4b">
+              <input type="color" id="opt-dots-color" value="#4b4b4b">
             </div>
-            <input type="text" class="color-hex" id="opt-dots-color-hex" value="#000000">
+            <input type="text" class="color-hex" id="opt-dots-color-hex" value="#4b4b4b">
           </div>
         </div>
         <div class="gradient-toggle">
@@ -1320,25 +1320,24 @@
       scheduleUpdate();
     });
 
-    hexEl.addEventListener('input', () => {
-      let v = hexEl.value.trim();
-      if (v.length === 7 && /^#[0-9a-fA-F]{6}$/.test(v)) {
-        colorEl.value = v;
-        swatchEl.style.background = v;
-        scheduleUpdate();
-      }
-    });
-
-    hexEl.addEventListener('change', () => {
+    function applyHex() {
       let v = hexEl.value.trim();
       if (!v.startsWith('#')) v = '#' + v;
+      // Expand shorthand #abc -> #aabbcc
+      if (/^#[0-9a-fA-F]{3}$/.test(v)) {
+        v = '#' + v[1]+v[1] + v[2]+v[2] + v[3]+v[3];
+      }
       if (/^#[0-9a-fA-F]{6}$/.test(v)) {
         hexEl.value = v;
         colorEl.value = v;
         swatchEl.style.background = v;
         scheduleUpdate();
       }
-    });
+    }
+
+    hexEl.addEventListener('input', applyHex);
+    hexEl.addEventListener('change', applyHex);
+    hexEl.addEventListener('paste', () => setTimeout(applyHex, 0));
   }
 
   // ===================== GRADIENT TOGGLE =====================
